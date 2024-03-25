@@ -1,4 +1,4 @@
-#include <queue>
+#include <vector>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -7,22 +7,29 @@
 
 using namespace std;
 
-std::queue<Process> Process::readProcessFile(char *f) {
+Process::Process() {
+}
+
+Process::Process(std::string name, unsigned int time, int serviceTime, int memory) {
+	Process::name = name;
+	Process::time = time;
+	Process::serviceTime = serviceTime;
+	Process::remainingTime = serviceTime;
+	Process::memory = memory;
+}
+
+std::vector<Process *> Process::readProcessFile(char *f) {
 	ifstream file;
 	string name;
- 	int time, remainingTime, memory;
+ 	int time, serviceTime, memory;
 
-	std::queue<Process> processes;
+	std::vector<Process*> processes;
 	
 	file.open(f);
 
-	while(file >> time >> name >> remainingTime >> memory) {
-		Process * process = new Process();
-		process->name = name;		
-		process->time = time;		
-		process->remainingTime = remainingTime;		
-		process->memory = memory;
-		processes.push(*process);		
+	while(file >> time >> name >> serviceTime >> memory) {
+		Process * process = new Process(name, time, serviceTime, memory);
+		processes.push_back(process);		
 	}
 
 	file.close();
@@ -43,4 +50,8 @@ State Process::update(int quantum) {
 	}
 
 	return state;
+}
+
+bool Process::operator <(const Process& rhs) const {
+	return this->name.compare(rhs.name) < 0;
 }

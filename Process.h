@@ -1,5 +1,5 @@
 #include <string>
-#include <queue>
+#include <vector>
 
 #include "State.h"
 
@@ -10,14 +10,16 @@ class Process {
 public:
 	std::string name;
 	unsigned int time;
-	int remainingTime;
-	unsigned int memory;
+	int serviceTime, remainingTime, memory;
 
 	State state=READY;
 
-	static std::queue<Process> readProcessFile(char *file);
-
+	Process();
+	Process(std::string name, unsigned int time, int serviceTime, int memory);
+	static std::vector<Process *> readProcessFile(char *file);
 	State update(int quantum);
+
+	bool operator <(const Process& rhs) const;
 };
 
 #endif
