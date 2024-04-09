@@ -71,11 +71,8 @@ std::pair<int,int> FirstFitMemStrategy::allocPair(int size, std::set<std::pair<i
 			if(p.first - 1 - lower <= size) {
 				return std::make_pair(lower, lower + size);
 			}
-
-			lower = p.second;
-		} else {
-			lower = p.second;
 		}
+		lower = p.second;
 	}
 
 	if(lower < UPPER_MEM_LIMIT && size <= UPPER_MEM_LIMIT - lower) {
